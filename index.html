@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Single SPA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://unpkg.com/single-spa@4.0.1/lib/single-spa.js"></script>
+</head>
+<body>  
+
+  <a href="#1">App 1</a>
+  <a href="#2">App 2</a>
+
+  <div id="app"></div>
+  <div id="app2"></div>
+  
+  <script>
+    var app = {
+      mount: function () {
+        return Promise.resolve().then(function () {
+          document.getElementById('app').append('my-app')
+          console.log('mounting')}
+        )
+      }, 
+      bootstrap: function () {
+        return Promise.resolve().then(function () {
+          console.log('bootstrap me')}
+        ) 
+      },
+      unmount: function () {
+        return Promise.resolve().then(function() {
+          document.getElementById('app').innerHTML = ''
+        })
+      }
+    }
+
+    var app2 = {
+      mount: function () {
+        return Promise.resolve().then(function () {
+          document.getElementById('app2').append('the other app')
+        })
+      }, 
+      bootstrap: function () {
+        return Promise.resolve().then(function () {}) 
+      },
+      unmount: function () {
+        return Promise.resolve().then(function() {
+          document.getElementById('app2').innerHTML = ''
+        })
+      }
+    }
+
+    singleSpa.registerApplication("myApp", app, function () {
+      return window.location.hash.includes("1")
+    })
+    singleSpa.registerApplication("myApp2", app2, function () {
+      return window.location.hash.includes("2")
+    })
+    
+    singleSpa.start()
+
+  </script> 
+  
+</body>
+</html>
